@@ -239,7 +239,7 @@ function App() {
                       </ul>
                     </div>
                     <div style={{ marginBottom: '10px' }}>
-                      <label style={{ display: 'block', marginBottom: '5px' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
                         Number of Colors:
                         <input
                           type="number"
@@ -266,7 +266,7 @@ function App() {
                       </label>
                     </div>
                     <div style={{ marginBottom: '10px' }}>
-                      <label style={{ display: 'block', marginBottom: '5px' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
                         Time per Description Round (seconds):
                         <input
                           type="number"
@@ -284,12 +284,12 @@ function App() {
                           onClick={(e) => e.currentTarget.focus()}
                           onMouseUp={(e) => e.currentTarget.blur()}
                           onBlur={(e) => e.currentTarget.blur()}
-                          style={{ marginLeft: '10px' }}
+                          style={{ width: '80px', textAlign: 'center' }}
                         />
                       </label>
                     </div>
                     <div style={{ marginBottom: '10px' }}>
-                      <label style={{ display: 'block', marginBottom: '5px' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
                         Time per Voting Round (seconds):
                         <input
                           type="number"
@@ -307,7 +307,7 @@ function App() {
                           onClick={(e) => e.currentTarget.focus()}
                           onMouseUp={(e) => e.currentTarget.blur()}
                           onBlur={(e) => e.currentTarget.blur()}
-                          style={{ marginLeft: '10px' }}
+                          style={{ width: '80px', textAlign: 'center' }}
                         />
                       </label>
                     </div>

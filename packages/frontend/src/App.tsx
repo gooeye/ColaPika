@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import './App.css';
 import PlayerList from './components/PlayerList';
 
@@ -158,36 +158,48 @@ function App() {
         <h1 className="game-title">ColaPika</h1>
         
         {!isConnected ? (
-        <div>
           <div>
-            <input
-              type="text"
-              placeholder="Your Name"
-              value={playerName}
-              onChange={(e) => setPlayerName(e.target.value)}
-            />
+            <div>
+              <input
+                type="text"
+                placeholder="Your Name"
+                value={playerName}
+                onChange={(e) => setPlayerName(e.target.value)}
+              />
+            </div>
+            {!window.location.search.includes('session=') && (
+              <>
+                <div>
+                  <input
+                    type="password"
+                    placeholder="Password (optional)"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+                <button onClick={createSession} disabled={!playerName}>
+                  Create New Session
+                </button>
+              </>
+            )}
+            {window.location.search.includes('session=') && (
+              <button 
+                onClick={() => {
+                  const params = new URLSearchParams(window.location.search);
+                  const sid = params.get('session');
+                  const pwd = params.get('password');
+                  if (sid) {
+                    setSessionId(sid);
+                    if (pwd) setPassword(pwd);
+                    connectToSession(sid);
+                  }
+                }} 
+                disabled={!playerName}
+              >
+                Join Session
+              </button>
+            )}
           </div>
-          <div>
-            <input
-              type="text"
-              placeholder="Session ID (for joining)"
-              value={sessionId}
-              onChange={(e) => setSessionId(e.target.value)}
-            />
-          </div>
-          <div>
-            <input
-              type="password"
-              placeholder="Password (optional)"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <button onClick={createSession} disabled={!playerName}>Create New Session</button>
-          <button onClick={() => connectToSession(sessionId)} disabled={!sessionId || !playerName}>
-            Join Session
-          </button>
-        </div>
       ) : (
         <div>
           <h2>Session: {sessionId}</h2>
@@ -276,9 +288,22 @@ function App() {
                   <p>Time per Voting Round: {settings.timePerVotingRound} seconds</p>
                 </div>
               )}
-              <button onClick={startGame} disabled={players.length < 3}>
-                Start Game (Need {Math.max(0, 3 - players.length)} more players)
-              </button>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
+                <button onClick={startGame} disabled={players.length < 3}>
+                  Start Game (Need {Math.max(0, 3 - players.length)} more players)
+                </button>
+                <button
+                  onClick={() => {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('session', sessionId);
+                    if (password) url.searchParams.set('password', password);
+                    navigator.clipboard.writeText(url.toString());
+                    alert('Share link copied to clipboard!');
+                  }}
+                >
+                  Copy Share Link
+                </button>
+              </div>
             </div>
           )}
           

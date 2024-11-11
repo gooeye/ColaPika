@@ -230,7 +230,7 @@ function advanceGameState(session: GameSession) {
 // WebSocket connection handler
 wss.on('connection', (ws, req) => {
   const url = new URL(req.url!, `ws://${req.headers.host}`);
-  const sessionId = url.searchParams.get('sessionId');
+  const sessionId = url.searchParams.get('sessionId') || url.searchParams.get('session');
   const password = url.searchParams.get('password');
   const playerName = url.searchParams.get('playerName');
 

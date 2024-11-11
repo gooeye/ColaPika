@@ -491,12 +491,56 @@ function App() {
           
           {gamePhase === 'RESULTS' && (
             <div>
-              <PlayerList 
-                players={players}
-                currentPlayerId={currentPlayerId}
-                gamePhase={gamePhase}
-                showScores={true}
-              />
+              <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Final Results</h2>
+              
+              {/* Podium display */}
+              <div className="podium-container">
+                {/* Sort players by score and take top 3 */}
+                {[...players]
+                  .sort((a, b) => b.score - a.score)
+                  .slice(0, 3)
+                  .map((player, index) => {
+                    const places = ['second-place', 'first-place', 'third-place'];
+                    const position = places[index === 1 ? 0 : index === 0 ? 1 : 2];
+                    
+                    return (
+                      <div key={player.id} className={`podium-place ${position}`}>
+                        <div className="podium-player">
+                          <div className="podium-name">{player.name}</div>
+                          <div className="podium-score">{player.score} points</div>
+                        </div>
+                        <div className="podium-block"></div>
+                      </div>
+                    );
+                  })}
+              </div>
+
+              {/* Other players */}
+              <div className="other-players">
+                <h3>Other Players</h3>
+                {[...players]
+                  .sort((a, b) => b.score - a.score)
+                  .slice(3)
+                  .map((player) => (
+                    <div key={player.id} className="other-player-item">
+                      <span style={{ fontWeight: 'bold' }}>{player.name}</span>
+                      <span style={{ marginLeft: '10px' }}>{player.score} points</span>
+                    </div>
+                  ))}
+              </div>
+
+              {/* Play Again button */}
+              <button
+                className="game-button full-width"
+                style={{ marginTop: '40px' }}
+                onClick={() => {
+                  if (wsRef.current) {
+                    wsRef.current.send(JSON.stringify({ type: 'START' }));
+                  }
+                }}
+              >
+                Play Again
+              </button>
             </div>
           )}
         </div>

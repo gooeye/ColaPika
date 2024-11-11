@@ -214,6 +214,25 @@ function App() {
                 <div style={{ marginBottom: '20px', padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '5px' }}>
                   <h3>Game Settings</h3>
                   <div style={{ marginBottom: '20px' }}>
+                    {/* Settings validation state */}
+                    <div style={{ 
+                      marginBottom: '10px', 
+                      padding: '10px', 
+                      backgroundColor: '#fff3cd', 
+                      borderRadius: '4px',
+                      display: settings.numberOfColors < 1 || settings.numberOfColors > 10 || 
+                               settings.timePerDescriptionRound < 10 || settings.timePerDescriptionRound > 120 ||
+                               settings.timePerVotingRound < 10 || settings.timePerVotingRound > 120 ? 'block' : 'none'
+                    }}>
+                      <ul style={{ margin: 0, paddingLeft: '20px', color: '#856404' }}>
+                        {settings.numberOfColors < 1 || settings.numberOfColors > 10 && 
+                          <li>Number of colors must be between 1 and 10</li>}
+                        {settings.timePerDescriptionRound < 10 || settings.timePerDescriptionRound > 120 && 
+                          <li>Description time must be between 10 and 120 seconds</li>}
+                        {settings.timePerVotingRound < 10 || settings.timePerVotingRound > 120 && 
+                          <li>Voting time must be between 10 and 120 seconds</li>}
+                      </ul>
+                    </div>
                     <div style={{ marginBottom: '10px' }}>
                       <label style={{ display: 'block', marginBottom: '5px' }}>
                         Number of Colors:

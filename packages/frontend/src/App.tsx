@@ -373,11 +373,20 @@ function App() {
           {gamePhase === 'DESCRIBING' && (
             <div>
               <div style={{
-                width: '200px',
-                height: '200px',
-                backgroundColor: currentColor,
+                display: 'flex',
+                justifyContent: 'center',
                 margin: '20px 0'
-              }} />
+              }}>
+                <div style={{
+                  width: '200px',
+                  height: '200px',
+                  backgroundColor: currentColor,
+                  borderRadius: '12px',
+                  padding: '20px',
+                  background: `${currentColor}`,
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                }} />
+              </div>
               <input
                 type="text"
                 value={description}
@@ -404,11 +413,20 @@ function App() {
               {gamePhase === 'VOTING' && (
                 <>
                   <div style={{
-                    width: '200px',
-                    height: '200px',
-                    backgroundColor: currentColor,
+                    display: 'flex',
+                    justifyContent: 'center',
                     margin: '20px 0'
-                  }} />
+                  }}>
+                    <div style={{
+                      width: '200px',
+                      height: '200px',
+                      backgroundColor: currentColor,
+                      borderRadius: '12px',
+                      padding: '20px',
+                      background: `${currentColor}`,
+                      boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                    }} />
+                  </div>
                   
                   {descriptions.find(d => d.id === currentPlayerId) && (
                     <div style={{ marginBottom: '20px', padding: '10px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import './App.css';
 
 function App() {
   const [sessionId, setSessionId] = useState<string>('');
@@ -127,8 +128,8 @@ function App() {
   }, []);
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Color Description Game</h1>
+    <div className="game-container">
+      <h1 className="game-title">ColaPika</h1>
       
       {!isConnected ? (
         <div>

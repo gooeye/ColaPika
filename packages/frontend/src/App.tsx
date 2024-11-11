@@ -160,6 +160,9 @@ function App() {
       )}
       
       <div className="main-content">
+        {(gamePhase === 'DESCRIBING' || gamePhase === 'VOTING') && (
+          <div className="timer-display">Time remaining: {timeRemaining}s</div>
+        )}
         <h1 className="game-title">ColaPika</h1>
         
         {!isConnected ? (
@@ -375,7 +378,6 @@ function App() {
                 backgroundColor: currentColor,
                 margin: '20px 0'
               }} />
-              <div>Time remaining: {timeRemaining}s</div>
               <input
                 type="text"
                 value={description}
@@ -407,7 +409,6 @@ function App() {
                     backgroundColor: currentColor,
                     margin: '20px 0'
                   }} />
-                  <div>Time remaining: {timeRemaining}s</div>
                   
                   {descriptions.find(d => d.id === currentPlayerId) && (
                     <div style={{ marginBottom: '20px', padding: '10px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>

@@ -285,6 +285,13 @@ wss.on('connection', (ws, req) => {
               session.gameState.descriptions.set(currentColor, new Map());
             }
             session.gameState.descriptions.get(currentColor)!.set(playerId, message.payload.description);
+            
+            // Check if all players have submitted descriptions
+            const descriptionsForColor = session.gameState.descriptions.get(currentColor)!;
+            if (descriptionsForColor.size === session.players.size) {
+              // Everyone has submitted, advance to next color
+              advanceGameState(session);
+            }
           }
           break;
           

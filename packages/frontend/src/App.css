@@ -28,7 +28,7 @@ html, body {
 .players-sidebar {
   width: 250px;
   background-color: white;
-  padding: 20px;
+  padding: 10px;
   border-right: 1px solid #e0e0e0;
   box-shadow: 2px 0 5px rgba(0,0,0,0.05);
   height: 100vh;
@@ -49,13 +49,9 @@ html, body {
 }
 
 .player-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 8px 12px;
   background-color: #f8f9fa;
   border-radius: 6px;
-  transition: background-color 0.2s;
 }
 
 
@@ -214,7 +210,7 @@ html, body {
   color: #2c3e50;
 }
 .players-container {
-  padding: 15px;
+  padding: 5px;
 }
 
 .players-list {

@@ -130,9 +130,21 @@ function App() {
 
   return (
     <div className="game-container">
-      <h1 className="game-title">ColaPika</h1>
+      {isConnected && (
+        <div className="players-sidebar">
+          <PlayerList 
+            players={players}
+            currentPlayerId={currentPlayerId}
+            gamePhase={gamePhase}
+            isHost={isHost}
+          />
+        </div>
+      )}
       
-      {!isConnected ? (
+      <div className="main-content">
+        <h1 className="game-title">ColaPika</h1>
+        
+        {!isConnected ? (
         <div>
           <div>
             <input
@@ -166,13 +178,6 @@ function App() {
       ) : (
         <div>
           <h2>Session: {sessionId}</h2>
-          <PlayerList 
-            players={players}
-            currentPlayerId={currentPlayerId}
-            gamePhase={gamePhase}
-            isHost={isHost}
-          />
-          
           {gamePhase === 'WAITING' && (
             <div>
               {isHost && (
@@ -399,6 +404,7 @@ function App() {
           )}
         </div>
       )}
+      </div>
     </div>
   );
 }

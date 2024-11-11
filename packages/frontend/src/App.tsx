@@ -295,6 +295,11 @@ function App() {
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && description.trim()) {
+                    handleSubmitDescription();
+                  }
+                }}
                 placeholder="Describe this color..."
               />
               <button onClick={handleSubmitDescription}>Submit Description</button>

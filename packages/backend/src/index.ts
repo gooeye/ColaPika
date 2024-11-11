@@ -194,6 +194,7 @@ function advanceGameState(session: GameSession) {
     // Move to next color or final results
     if (session.gameState.currentColorIndex < session.gameState.colors.length - 1) {
       session.gameState.currentColorIndex++;
+      session.gameState.currentPhase = 'INTERMEDIATE_RESULTS';
     } else {
       session.gameState.currentPhase = 'RESULTS';
       broadcastToSession(session, {
@@ -307,18 +308,21 @@ wss.on('connection', (ws, req) => {
           
         case 'NEXT_VOTE':
           if (session.gameState?.currentPhase === 'INTERMEDIATE_RESULTS') {
+            // Start voting phase for the next color
             session.gameState.currentPhase = 'VOTING';
             session.gameState.timeRemaining = session.settings.timePerRound;
+            const currentColor = session.gameState.colors[session.gameState.currentColorIndex];
             
+            // Get descriptions for the current color
             const descriptionsArray = Array.from(
-              session.gameState.descriptions.get(session.gameState.colors[session.gameState.currentColorIndex]) || new Map()
+              session.gameState.descriptions.get(currentColor) || new Map()
             ).map(([id, text]) => ({ id, text }));
             
             broadcastToSession(session, {
               type: 'STATE_UPDATE',
               payload: {
                 phase: 'VOTING',
-                color: session.gameState.colors[session.gameState.currentColorIndex],
+                color: currentColor,
                 descriptions: descriptionsArray,
                 timeRemaining: session.settings.timePerRound
               }

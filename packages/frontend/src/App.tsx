@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './App.css';
+import PlayerList from './components/PlayerList';
 
 function App() {
   const [sessionId, setSessionId] = useState<string>('');

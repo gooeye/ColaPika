@@ -163,7 +163,7 @@ function App() {
         <h1 className="game-title">ColaPika</h1>
         
         {!isConnected ? (
-          <div>
+          <div className="game-content">
             <div>
               <input
                 type="text"
@@ -211,7 +211,7 @@ function App() {
             )}
           </div>
       ) : (
-        <div>
+        <div className="game-content">
           <div className="session-id">Session ID: {sessionId}</div>
           {gamePhase === 'WAITING' && (
             <div>

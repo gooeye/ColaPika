@@ -210,6 +210,18 @@ wss.on('connection', (ws, req) => {
     }
   }));
 
+  // Broadcast updated player list to all players
+  broadcastToSession(session, {
+    type: 'PLAYERS_UPDATE',
+    payload: {
+      players: Array.from(session.players.values()).map(p => ({
+        id: p.id,
+        name: p.name,
+        score: p.score
+      }))
+    }
+  });
+
   // Handle messages from the client
   ws.on('message', (data: string) => {
     try {
@@ -217,7 +229,7 @@ wss.on('connection', (ws, req) => {
       
       switch (message.type) {
         case 'START':
-          if (session.players.size >= 2) {
+          if (session.players.size >= 3) {
             startNewRound(session);
           }
           break;

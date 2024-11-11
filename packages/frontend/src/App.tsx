@@ -13,6 +13,7 @@ function App() {
   const [description, setDescription] = useState<string>('');
   const [descriptions, setDescriptions] = useState<{id: string, text: string}[]>([]);
   const [players, setPlayers] = useState<{id: string, name: string, score: number}[]>([]);
+  const [currentPlayerId, setCurrentPlayerId] = useState<string>('');
   const wsRef = useRef<WebSocket | null>(null);
 
   const createSession = async () => {
@@ -46,7 +47,11 @@ function App() {
       
       switch (message.type) {
         case 'JOIN':
-          setPlayerId(message.payload.playerId);
+          setCurrentPlayerId(message.payload.playerId);
+          setPlayers(message.payload.players);
+          break;
+          
+        case 'PLAYERS_UPDATE':
           setPlayers(message.payload.players);
           break;
           
@@ -139,11 +144,18 @@ function App() {
       ) : (
         <div>
           <h2>Session: {sessionId}</h2>
-          <div>Players: {players.map(p => p.name).join(', ')}</div>
+          <div>
+            <h3>Players:</h3>
+            {players.map(p => (
+              <div key={p.id}>
+                {p.name} {p.id === currentPlayerId ? '(You)' : ''}
+              </div>
+            ))}
+          </div>
           
           {gamePhase === 'WAITING' && (
-            <button onClick={startGame} disabled={players.length < 2}>
-              Start Game
+            <button onClick={startGame} disabled={players.length < 3}>
+              Start Game (Need {Math.max(0, 3 - players.length)} more players)
             </button>
           )}
           

@@ -121,6 +121,18 @@ function advanceGameState(session: GameSession) {
       session.timer = setInterval(() => {
         if (session.gameState) {
           session.gameState.timeRemaining--;
+          
+          broadcastToSession(session, {
+            type: 'STATE_UPDATE',
+            payload: { timeRemaining: session.gameState.timeRemaining }
+          });
+          
+          if (session.gameState.timeRemaining <= 0) {
+            advanceGameState(session);
+          }
+        }
+        if (session.gameState) {
+          session.gameState.timeRemaining--;
           if (session.gameState.timeRemaining <= 0) {
             advanceGameState(session);
           }

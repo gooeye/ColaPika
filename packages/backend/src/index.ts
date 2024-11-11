@@ -36,7 +36,31 @@ function broadcastToSession(session: GameSession, message: GameMessage) {
 const app = express();
 const port = process.env.PORT || 3001;
 const server = http.createServer(app);
-const wss = new WebSocketServer({ server });
+const wss = new WebSocketServer({ server, clientTracking: true });
+
+// Heartbeat interval (15 seconds)
+const HEARTBEAT_INTERVAL = 15000;
+const HEARTBEAT_TIMEOUT = HEARTBEAT_INTERVAL + 5000;
+
+function heartbeat(this: any) {
+  this.isAlive = true;
+}
+
+// Set up heartbeat interval
+const interval = setInterval(() => {
+  wss.clients.forEach((ws: any) => {
+    if (ws.isAlive === false) {
+      ws.terminate();
+      return;
+    }
+    ws.isAlive = false;
+    ws.ping();
+  });
+}, HEARTBEAT_INTERVAL);
+
+wss.on('close', () => {
+  clearInterval(interval);
+});
 
 app.use(cors());
 app.use(express.json());
@@ -414,9 +438,26 @@ wss.on('connection', (ws, req) => {
     }
   });
 
+  // Set up heartbeat for this connection
+  (ws as any).isAlive = true;
+  ws.on('pong', heartbeat);
+
   // Handle client disconnect
   ws.on('close', () => {
     session.players.delete(playerId);
+    
+    // Broadcast player removal to remaining players
+    broadcastToSession(session, {
+      type: 'PLAYERS_UPDATE',
+      payload: {
+        players: Array.from(session.players.values()).map(p => ({
+          id: p.id,
+          name: p.name,
+          score: p.score
+        }))
+      }
+    });
+
     if (session.players.size === 0) {
       clearInterval(session.timer);
       sessions.delete(sessionId);

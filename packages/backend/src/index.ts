@@ -116,11 +116,20 @@ function advanceGameState(session: GameSession) {
       session.gameState.currentColorIndex++;
       session.gameState.timeRemaining = session.settings.timePerDescriptionRound;
       
+      // Reset all players' description status
+      session.players.forEach(player => {
+        player.description = undefined;
+      });
+      
       broadcastToSession(session, {
         type: 'STATE_UPDATE',
         payload: {
           color: session.gameState.colors[session.gameState.currentColorIndex],
-          timeRemaining: session.settings.timePerRound
+          timeRemaining: session.settings.timePerRound,
+          descriptions: Array.from(session.players.values()).map(p => ({
+            id: p.id,
+            text: p.description
+          }))
         }
       });
       

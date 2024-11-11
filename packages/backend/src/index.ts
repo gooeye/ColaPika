@@ -108,6 +108,11 @@ function advanceGameState(session: GameSession) {
   
   if (session.gameState.currentPhase === 'DESCRIBING') {
     if (session.gameState.currentColorIndex < session.gameState.colors.length - 1) {
+      // Reset all players' description status
+      session.players.forEach(player => {
+        player.description = undefined;
+      });
+        
       session.gameState.currentColorIndex++;
       session.gameState.timeRemaining = session.settings.timePerDescriptionRound;
       
@@ -302,7 +307,23 @@ wss.on('connection', (ws, req) => {
             if (!session.gameState.descriptions.has(currentColor)) {
               session.gameState.descriptions.set(currentColor, new Map());
             }
+            // Update player's description status
+            const player = session.players.get(playerId);
+            if (player) {
+              player.description = message.payload.description;
+            }
             session.gameState.descriptions.get(currentColor)!.set(playerId, message.payload.description);
+            
+            // Broadcast updated player statuses
+            broadcastToSession(session, {
+              type: 'STATE_UPDATE',
+              payload: {
+                descriptions: Array.from(session.players.values()).map(p => ({
+                  id: p.id,
+                  text: p.description
+                }))
+              }
+            });
             
             // Check if all players have submitted descriptions
             const descriptionsForColor = session.gameState.descriptions.get(currentColor)!;

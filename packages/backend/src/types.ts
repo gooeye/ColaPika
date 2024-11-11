@@ -3,6 +3,7 @@ export interface Player {
   name: string;
   score: number;
   ws: WebSocket;
+  description?: string;
 }
 
 export interface GameState {

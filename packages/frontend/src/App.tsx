@@ -225,11 +225,11 @@ function App() {
                                settings.timePerVotingRound < 10 || settings.timePerVotingRound > 120 ? 'block' : 'none'
                     }}>
                       <ul style={{ margin: 0, paddingLeft: '20px', color: '#856404' }}>
-                        {settings.numberOfColors < 1 || settings.numberOfColors > 10 && 
+                        {(settings.numberOfColors < 1 || settings.numberOfColors > 10) && 
                           <li>Number of colors must be between 1 and 10</li>}
-                        {settings.timePerDescriptionRound < 10 || settings.timePerDescriptionRound > 120 && 
+                        {(settings.timePerDescriptionRound < 10 || settings.timePerDescriptionRound > 120) && 
                           <li>Description time must be between 10 and 120 seconds</li>}
-                        {settings.timePerVotingRound < 10 || settings.timePerVotingRound > 120 && 
+                        {(settings.timePerVotingRound < 10 || settings.timePerVotingRound > 120) && 
                           <li>Voting time must be between 10 and 120 seconds</li>}
                       </ul>
                     </div>

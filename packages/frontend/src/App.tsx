@@ -186,13 +186,23 @@ function App() {
                 backgroundColor: currentColor,
                 margin: '20px 0'
               }} />
-              <div>
+              <div>Time remaining: {timeRemaining}s</div>
+              <h3>Vote for the best description:</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {descriptions
                   .filter(d => d.id !== playerId)
-                  .map((d, i) => (
-                    <div key={i}>
-                      <button onClick={() => handleVote(d.id)}>{d.text}</button>
-                    </div>
+                  .map((d) => (
+                    <button 
+                      key={d.id}
+                      onClick={() => handleVote(d.id)}
+                      style={{
+                        padding: '10px',
+                        fontSize: '16px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {d.text}
+                    </button>
                   ))}
               </div>
             </div>

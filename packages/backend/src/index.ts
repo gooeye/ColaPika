@@ -135,14 +135,36 @@ function advanceGameState(session: GameSession) {
     } else {
       session.gameState.currentPhase = 'VOTING';
       session.gameState.currentColorIndex = 0;
+      session.gameState.timeRemaining = session.settings.timePerRound;
+
+      // Convert descriptions Map to array format
+      const descriptionsArray = Array.from(session.gameState.descriptions.get(session.gameState.colors[0]) || new Map())
+        .map(([id, text]) => ({ id, text }));
+
       broadcastToSession(session, {
         type: 'STATE_UPDATE',
         payload: {
           phase: 'VOTING',
           color: session.gameState.colors[0],
-          descriptions: Array.from(session.gameState.descriptions.get(session.gameState.colors[0]) || [])
+          descriptions: descriptionsArray,
+          timeRemaining: session.settings.timePerRound
         }
       });
+
+      session.timer = setInterval(() => {
+        if (session.gameState) {
+          session.gameState.timeRemaining--;
+          
+          broadcastToSession(session, {
+            type: 'STATE_UPDATE',
+            payload: { timeRemaining: session.gameState.timeRemaining }
+          });
+          
+          if (session.gameState.timeRemaining <= 0) {
+            advanceGameState(session);
+          }
+        }
+      }, 1000);
     }
   } else if (session.gameState.currentPhase === 'VOTING') {
     // Calculate scores and show results

@@ -131,12 +131,6 @@ function advanceGameState(session: GameSession) {
             advanceGameState(session);
           }
         }
-        if (session.gameState) {
-          session.gameState.timeRemaining--;
-          if (session.gameState.timeRemaining <= 0) {
-            advanceGameState(session);
-          }
-        }
       }, 1000);
     } else {
       session.gameState.currentPhase = 'VOTING';

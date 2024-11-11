@@ -199,49 +199,60 @@ function App() {
                   )}
 
                   <h3>Vote for the best description:</h3>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    {descriptions
-                      .filter(d => d.id !== currentPlayerId) // Filter out current player's description
-                      .map((d) => (
-                        <div key={d.id} style={{ marginBottom: '10px' }}>
-                          <button 
-                            onClick={() => setSelectedDescriptionId(d.id)}
-                            style={{
-                              padding: '10px',
-                              fontSize: '16px',
-                              cursor: 'pointer',
-                              width: '100%',
-                              backgroundColor: selectedDescriptionId === d.id ? '#e0e0e0' : 'white'
-                            }}
-                          >
-                            {d.text}
-                          </button>
-                          {selectedDescriptionId === d.id && (
+                  {selectedDescriptionId === 'voted' ? (
+                    <div>
+                      <div style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '5px', marginBottom: '20px' }}>
+                        <strong>Your vote:</strong> {descriptions.find(d => d.id === selectedDescriptionId)?.text}
+                      </div>
+                      <div style={{ color: '#4CAF50', textAlign: 'center', padding: '20px' }}>
+                        Vote submitted! Waiting for other players...
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
+                        {descriptions
+                          .filter(d => d.id !== currentPlayerId)
+                          .map((d) => (
                             <button 
-                              onClick={() => {
-                                handleVote(d.id);
-                                setSelectedDescriptionId('voted');
-                              }}
+                              key={d.id}
+                              onClick={() => setSelectedDescriptionId(d.id)}
                               style={{
-                                marginTop: '5px',
-                                padding: '5px 10px',
-                                backgroundColor: '#4CAF50',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '3px',
-                                cursor: 'pointer'
+                                padding: '10px',
+                                fontSize: '16px',
+                                cursor: 'pointer',
+                                width: '100%',
+                                backgroundColor: selectedDescriptionId === d.id ? '#e0e0e0' : 'white',
+                                border: '1px solid #ccc',
+                                borderRadius: '5px'
                               }}
                             >
-                              Confirm Vote
+                              {d.text}
                             </button>
-                          )}
-                        </div>
-                      ))}
-                  </div>
-                  {selectedDescriptionId === 'voted' && (
-                    <div style={{ marginTop: '10px', color: '#4CAF50' }}>
-                      Vote submitted! Waiting for other players...
-                    </div>
+                          ))}
+                      </div>
+                      <button 
+                        onClick={() => {
+                          if (selectedDescriptionId && selectedDescriptionId !== 'voted') {
+                            handleVote(selectedDescriptionId);
+                            setSelectedDescriptionId('voted');
+                          }
+                        }}
+                        style={{
+                          padding: '10px 20px',
+                          fontSize: '16px',
+                          backgroundColor: selectedDescriptionId ? '#4CAF50' : '#cccccc',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '5px',
+                          cursor: selectedDescriptionId ? 'pointer' : 'not-allowed',
+                          width: '100%'
+                        }}
+                        disabled={!selectedDescriptionId || selectedDescriptionId === 'voted'}
+                      >
+                        Confirm Vote
+                      </button>
+                    </>
                   )}
                 </>
               )}

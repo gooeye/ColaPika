@@ -190,15 +190,17 @@ function App() {
                   }} />
                   <div>Time remaining: {timeRemaining}s</div>
                   
-                  <div style={{ marginBottom: '20px', padding: '10px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
-                    <h4>Your Description:</h4>
-                    <div>{descriptions.find(d => d.id === playerId)?.text || 'No description submitted'}</div>
-                  </div>
+                  {descriptions.find(d => d.id === currentPlayerId) && (
+                    <div style={{ marginBottom: '20px', padding: '10px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
+                      <h4>Your Description:</h4>
+                      <div>{descriptions.find(d => d.id === currentPlayerId)?.text}</div>
+                    </div>
+                  )}
 
                   <h3>Vote for the best description:</h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {descriptions
-                      .filter(d => d.id !== playerId)
+                      .filter(d => d.id !== currentPlayerId) // Filter out current player's description
                       .map((d) => (
                         <div key={d.id} style={{ marginBottom: '10px' }}>
                           <button 

@@ -308,6 +308,7 @@ function App() {
                       </label>
                     </div>
                     <button
+                      className="game-button"
                       onClick={() => {
                         if (wsRef.current && 
                             settings.numberOfColors >= 1 && settings.numberOfColors <= 10 &&
@@ -324,14 +325,6 @@ function App() {
                         settings.timePerDescriptionRound < 10 || settings.timePerDescriptionRound > 120 ||
                         settings.timePerVotingRound < 10 || settings.timePerVotingRound > 120
                       }
-                      style={{
-                        padding: '8px 16px',
-                        backgroundColor: '#4CAF50',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer'
-                      }}
                     >
                       Update Settings
                     </button>

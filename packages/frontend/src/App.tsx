@@ -30,7 +30,7 @@ function App() {
 
   const createSession = async () => {
     try {
-      const response = await fetch('http://localhost:3001/sessions', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/sessions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password }),
@@ -46,7 +46,7 @@ function App() {
 
   const connectToSession = (sid: string) => {
     const ws = new WebSocket(
-      `ws://localhost:3001?sessionId=${sid}${password ? `&password=${password}` : ''}&playerName=${playerName}`
+      `${import.meta.env.VITE_BACKEND_WS_URL}?sessionId=${sid}${password ? `&password=${password}` : ''}&playerName=${playerName}`
     );
 
     ws.onopen = () => {

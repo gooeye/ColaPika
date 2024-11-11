@@ -166,14 +166,12 @@ function App() {
       ) : (
         <div>
           <h2>Session: {sessionId}</h2>
-          <div>
-            <h3>Players:</h3>
-            {players.map(p => (
-              <div key={p.id}>
-                {p.name} {p.id === currentPlayerId ? '(You)' : ''}
-              </div>
-            ))}
-          </div>
+          <PlayerList 
+            players={players}
+            currentPlayerId={currentPlayerId}
+            gamePhase={gamePhase}
+            isHost={isHost}
+          />
           
           {gamePhase === 'WAITING' && (
             <div>
@@ -368,14 +366,12 @@ function App() {
               
               {gamePhase === 'INTERMEDIATE_RESULTS' && (
                 <div>
-                  <h3>Current Scores:</h3>
-                  {players
-                    .sort((a, b) => b.score - a.score)
-                    .map((player, i) => (
-                      <div key={player.id}>
-                        {i + 1}. {player.name}: {player.score} points
-                      </div>
-                    ))}
+                  <PlayerList 
+                    players={players}
+                    currentPlayerId={currentPlayerId}
+                    gamePhase={gamePhase}
+                    showScores={true}
+                  />
                   <button 
                     onClick={() => {
                       if (wsRef.current) {
@@ -393,14 +389,12 @@ function App() {
           
           {gamePhase === 'RESULTS' && (
             <div>
-              <h3>Final Scores:</h3>
-              {players
-                .sort((a, b) => b.score - a.score)
-                .map((player, i) => (
-                  <div key={player.id}>
-                    {i + 1}. {player.name}: {player.score} points
-                  </div>
-                ))}
+              <PlayerList 
+                players={players}
+                currentPlayerId={currentPlayerId}
+                gamePhase={gamePhase}
+                showScores={true}
+              />
             </div>
           )}
         </div>

@@ -187,3 +187,40 @@
   margin-bottom: 5px;
   color: #2c3e50;
 }
+.players-sidebar {
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.players-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.player-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.player-name {
+  font-weight: 500;
+}
+
+.player-score {
+  color: #666;
+}
+
+.players-needed {
+  margin-top: 10px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}

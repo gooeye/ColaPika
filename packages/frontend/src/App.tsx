@@ -178,33 +178,60 @@ function App() {
             </div>
           )}
           
-          {gamePhase === 'VOTING' && (
+          {(gamePhase === 'VOTING' || gamePhase === 'INTERMEDIATE_RESULTS') && (
             <div>
-              <div style={{
-                width: '200px',
-                height: '200px',
-                backgroundColor: currentColor,
-                margin: '20px 0'
-              }} />
-              <div>Time remaining: {timeRemaining}s</div>
-              <h3>Vote for the best description:</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {descriptions
-                  .filter(d => d.id !== playerId)
-                  .map((d) => (
-                    <button 
-                      key={d.id}
-                      onClick={() => handleVote(d.id)}
-                      style={{
-                        padding: '10px',
-                        fontSize: '16px',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      {d.text}
-                    </button>
-                  ))}
-              </div>
+              {gamePhase === 'VOTING' && (
+                <>
+                  <div style={{
+                    width: '200px',
+                    height: '200px',
+                    backgroundColor: currentColor,
+                    margin: '20px 0'
+                  }} />
+                  <div>Time remaining: {timeRemaining}s</div>
+                  <h3>Vote for the best description:</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {descriptions
+                      .filter(d => d.id !== playerId)
+                      .map((d) => (
+                        <button 
+                          key={d.id}
+                          onClick={() => handleVote(d.id)}
+                          style={{
+                            padding: '10px',
+                            fontSize: '16px',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          {d.text}
+                        </button>
+                      ))}
+                  </div>
+                </>
+              )}
+              
+              {gamePhase === 'INTERMEDIATE_RESULTS' && (
+                <div>
+                  <h3>Current Scores:</h3>
+                  {players
+                    .sort((a, b) => b.score - a.score)
+                    .map((player, i) => (
+                      <div key={player.id}>
+                        {i + 1}. {player.name}: {player.score} points
+                      </div>
+                    ))}
+                  <button 
+                    onClick={() => {
+                      if (wsRef.current) {
+                        wsRef.current.send(JSON.stringify({ type: 'NEXT_VOTE' }));
+                      }
+                    }}
+                    style={{ marginTop: '20px' }}
+                  >
+                    Next Color
+                  </button>
+                </div>
+              )}
             </div>
           )}
           

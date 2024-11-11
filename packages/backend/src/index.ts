@@ -167,24 +167,22 @@ function advanceGameState(session: GameSession) {
       }, 1000);
     }
   } else if (session.gameState.currentPhase === 'VOTING') {
-    // Calculate scores and show results
-    session.gameState.currentPhase = 'RESULTS';
-    const scores = new Map<string, number>();
+    // Calculate scores for current color
+    const currentColor = session.gameState.colors[session.gameState.currentColorIndex];
+    const votes = session.gameState.votes.get(currentColor) || new Map();
     
-    session.gameState.votes.forEach((votes, color) => {
-      votes.forEach((votedForId) => {
-        scores.set(votedForId, (scores.get(votedForId) || 0) + 1);
-      });
+    votes.forEach((votedForId) => {
+      const player = session.players.get(votedForId);
+      if (player) {
+        player.score = (player.score || 0) + 1;
+      }
     });
-    
-    session.players.forEach((player) => {
-      player.score = (scores.get(player.id) || 0);
-    });
-    
+
+    // Show intermediate results
     broadcastToSession(session, {
       type: 'STATE_UPDATE',
       payload: {
-        phase: 'RESULTS',
+        phase: 'INTERMEDIATE_RESULTS',
         scores: Array.from(session.players.values()).map(p => ({
           id: p.id,
           name: p.name,
@@ -192,6 +190,24 @@ function advanceGameState(session: GameSession) {
         }))
       }
     });
+
+    // Move to next color or final results
+    if (session.gameState.currentColorIndex < session.gameState.colors.length - 1) {
+      session.gameState.currentColorIndex++;
+    } else {
+      session.gameState.currentPhase = 'RESULTS';
+      broadcastToSession(session, {
+        type: 'STATE_UPDATE',
+        payload: {
+          phase: 'RESULTS',
+          scores: Array.from(session.players.values()).map(p => ({
+            id: p.id,
+            name: p.name,
+            score: p.score
+          }))
+        }
+      });
+    }
   }
 }
 
@@ -279,6 +295,42 @@ wss.on('connection', (ws, req) => {
               session.gameState.votes.set(currentColor, new Map());
             }
             session.gameState.votes.get(currentColor)!.set(playerId, message.payload.votedForId);
+          }
+          break;
+          
+        case 'NEXT_VOTE':
+          if (session.gameState?.currentPhase === 'INTERMEDIATE_RESULTS') {
+            session.gameState.currentPhase = 'VOTING';
+            session.gameState.timeRemaining = session.settings.timePerRound;
+            
+            const descriptionsArray = Array.from(
+              session.gameState.descriptions.get(session.gameState.colors[session.gameState.currentColorIndex]) || new Map()
+            ).map(([id, text]) => ({ id, text }));
+            
+            broadcastToSession(session, {
+              type: 'STATE_UPDATE',
+              payload: {
+                phase: 'VOTING',
+                color: session.gameState.colors[session.gameState.currentColorIndex],
+                descriptions: descriptionsArray,
+                timeRemaining: session.settings.timePerRound
+              }
+            });
+            
+            session.timer = setInterval(() => {
+              if (session.gameState) {
+                session.gameState.timeRemaining--;
+                
+                broadcastToSession(session, {
+                  type: 'STATE_UPDATE',
+                  payload: { timeRemaining: session.gameState.timeRemaining }
+                });
+                
+                if (session.gameState.timeRemaining <= 0) {
+                  advanceGameState(session);
+                }
+              }
+            }, 1000);
           }
           break;
       }

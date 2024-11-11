@@ -1,0 +1,13 @@
+{
+  "name": "game-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "start:backend": "yarn workspace backend start",
+    "start:frontend": "yarn workspace frontend start",
+    "dev:backend": "yarn workspace backend dev",
+    "dev:frontend": "yarn workspace frontend dev"
+  }
+}

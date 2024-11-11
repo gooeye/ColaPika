@@ -105,7 +105,7 @@ function startNewRound(session: GameSession) {
     payload: {
       phase: session.gameState.currentPhase,
       color: colors[0],
-      timeRemaining: session.settings.timePerRound
+      timeRemaining: session.settings.timePerVotingRound
     }
   });
 
@@ -186,7 +186,7 @@ function advanceGameState(session: GameSession) {
           phase: 'VOTING',
           color: session.gameState.colors[0],
           descriptions: descriptionsArray,
-          timeRemaining: session.settings.timePerRound
+          timeRemaining: session.settings.timePerVotingRound
         }
       });
 
@@ -412,7 +412,7 @@ wss.on('connection', (ws, req) => {
                 phase: 'VOTING',
                 color: currentColor,
                 descriptions: descriptionsArray,
-                timeRemaining: session.settings.timePerRound
+                timeRemaining: session.settings.timePerVotingRound
               }
             });
             

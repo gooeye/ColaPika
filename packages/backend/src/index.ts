@@ -303,6 +303,13 @@ wss.on('connection', (ws, req) => {
               session.gameState.votes.set(currentColor, new Map());
             }
             session.gameState.votes.get(currentColor)!.set(playerId, message.payload.votedForId);
+            
+            // Check if everyone has voted
+            const votes = session.gameState.votes.get(currentColor)!;
+            if (votes.size === session.players.size) {
+              // Everyone has voted, advance the game state
+              advanceGameState(session);
+            }
           }
           break;
           

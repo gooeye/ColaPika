@@ -189,24 +189,57 @@ function App() {
                     margin: '20px 0'
                   }} />
                   <div>Time remaining: {timeRemaining}s</div>
+                  
+                  <div style={{ marginBottom: '20px', padding: '10px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
+                    <h4>Your Description:</h4>
+                    <div>{descriptions.find(d => d.id === playerId)?.text || 'No description submitted'}</div>
+                  </div>
+
                   <h3>Vote for the best description:</h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {descriptions
                       .filter(d => d.id !== playerId)
                       .map((d) => (
-                        <button 
-                          key={d.id}
-                          onClick={() => handleVote(d.id)}
-                          style={{
-                            padding: '10px',
-                            fontSize: '16px',
-                            cursor: 'pointer'
-                          }}
-                        >
-                          {d.text}
-                        </button>
+                        <div key={d.id} style={{ marginBottom: '10px' }}>
+                          <button 
+                            onClick={() => setCurrentPlayerId(d.id)}
+                            style={{
+                              padding: '10px',
+                              fontSize: '16px',
+                              cursor: 'pointer',
+                              width: '100%',
+                              backgroundColor: currentPlayerId === d.id ? '#e0e0e0' : 'white'
+                            }}
+                          >
+                            {d.text}
+                          </button>
+                          {currentPlayerId === d.id && (
+                            <button 
+                              onClick={() => {
+                                handleVote(d.id);
+                                setCurrentPlayerId('voted');
+                              }}
+                              style={{
+                                marginTop: '5px',
+                                padding: '5px 10px',
+                                backgroundColor: '#4CAF50',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '3px',
+                                cursor: 'pointer'
+                              }}
+                            >
+                              Confirm Vote
+                            </button>
+                          )}
+                        </div>
                       ))}
                   </div>
+                  {currentPlayerId === 'voted' && (
+                    <div style={{ marginTop: '10px', color: '#4CAF50' }}>
+                      Vote submitted! Waiting for other players...
+                    </div>
+                  )}
                 </>
               )}
               

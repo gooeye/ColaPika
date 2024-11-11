@@ -47,6 +47,14 @@ html, body {
   max-width: 800px;
 }
 
+.game-content {
+  width: 500px;
+}
+
+.game-content > * {
+  width: 100%;
+}
+
 .players-list {
   display: flex;
   flex-direction: column;

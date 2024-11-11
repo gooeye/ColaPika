@@ -246,6 +246,20 @@ html, body {
   display: block;
 }
 
+.player-status {
+  font-size: 0.9em;
+  display: block;
+  font-style: italic;
+}
+
+.status-describing {
+  color: #f39c12;
+}
+
+.status-done {
+  color: #27ae60;
+}
+
 .players-needed {
   margin-top: 10px;
   text-align: center;

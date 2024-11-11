@@ -4,6 +4,7 @@ interface Player {
   id: string;
   name: string;
   score: number;
+  description?: string;
 }
 
 interface PlayerListProps {
@@ -37,8 +38,14 @@ const PlayerList: React.FC<PlayerListProps> = ({
               {player.id === currentPlayerId && ' (You)'}
               {isHost && player.id === players[0]?.id && ' (Host)'}
             </span>
-            {showScores && gamePhase !== 'WAITING' && (
-              <span className="player-score">{player.score} points</span>
+            {gamePhase === 'DESCRIBING' ? (
+              <span className={`player-status ${player.description ? 'status-done' : 'status-describing'}`}>
+                {player.description ? 'Done' : 'Describing...'}
+              </span>
+            ) : (
+              showScores && gamePhase !== 'WAITING' && (
+                <span className="player-score">{player.score} points</span>
+              )
             )}
           </div>
         ))}

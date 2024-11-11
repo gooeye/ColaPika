@@ -43,7 +43,10 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: calc(100vw - 300px);
+  width: calc(100vw - 300px);
+  max-width: 800px;
+  margin: 0 auto;
+  margin-left: 300px;
 }
 
 .players-list {

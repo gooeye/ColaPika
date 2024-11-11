@@ -182,13 +182,18 @@ function App() {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-                <button onClick={createSession} disabled={!playerName}>
+                <button 
+                  className="game-button full-width"
+                  onClick={createSession} 
+                  disabled={!playerName}
+                >
                   Create New Session
                 </button>
               </>
             )}
             {window.location.search.includes('session=') && (
               <button 
+                className="game-button full-width"
                 onClick={() => {
                   const params = new URLSearchParams(window.location.search);
                   const sid = params.get('session');
@@ -342,10 +347,15 @@ function App() {
                 </div>
               )}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
-                <button onClick={startGame} disabled={players.length < 3}>
+                <button 
+                  className="game-button full-width"
+                  onClick={startGame} 
+                  disabled={players.length < 3}
+                >
                   Start Game (Need {Math.max(0, 3 - players.length)} more players)
                 </button>
                 <button
+                  className="game-button secondary full-width"
                   onClick={() => {
                     const url = new URL(window.location.href);
                     url.searchParams.set('session', sessionId);
@@ -380,7 +390,13 @@ function App() {
                 }}
                 placeholder="Describe this color..."
               />
-              <button onClick={handleSubmitDescription}>Submit Description</button>
+              <button 
+                className="game-button full-width"
+                onClick={handleSubmitDescription}
+                disabled={!description.trim()}
+              >
+                Submit Description
+              </button>
             </div>
           )}
           
@@ -437,6 +453,7 @@ function App() {
                           ))}
                       </div>
                       <button 
+                        className="game-button full-width"
                         onClick={() => {
                           if (selectedDescriptionId) {
                             handleVote(selectedDescriptionId);
@@ -445,16 +462,6 @@ function App() {
                               [currentColor]: true
                             }));
                           }
-                        }}
-                        style={{
-                          padding: '10px 20px',
-                          fontSize: '16px',
-                          backgroundColor: selectedDescriptionId ? '#4CAF50' : '#cccccc',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '5px',
-                          cursor: selectedDescriptionId ? 'pointer' : 'not-allowed',
-                          width: '100%'
                         }}
                         disabled={!selectedDescriptionId || submittedVotes[currentColor]}
                       >
@@ -474,6 +481,7 @@ function App() {
                     showScores={true}
                   />
                   <button 
+                    className="game-button"
                     onClick={() => {
                       if (wsRef.current) {
                         wsRef.current.send(JSON.stringify({ type: 'NEXT_VOTE' }));

@@ -114,26 +114,37 @@ html, body {
   font-size: 1em;
 }
 
-.button {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 8px;
-  background-color: #3498db;
+.game-button {
+  padding: 8px 16px;
+  background-color: #4CAF50;
   color: white;
-  font-size: 1em;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  font-size: 1em;
+  transition: background-color 0.2s, opacity 0.2s;
+  margin: 5px 0;
 }
 
-.button:hover {
-  background-color: #2980b9;
+.game-button:hover:not(:disabled) {
+  background-color: #45a049;
 }
 
-.button:disabled {
-  background-color: #bdc3c7;
+.game-button:disabled {
+  opacity: 0.6;
   cursor: not-allowed;
+}
+
+.game-button.secondary {
+  background-color: #6c757d;
+}
+
+.game-button.secondary:hover:not(:disabled) {
+  background-color: #5a6268;
+}
+
+.game-button.full-width {
+  width: 100%;
 }
 
 .color-display {

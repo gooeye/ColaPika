@@ -182,16 +182,24 @@ function App() {
                         max="10"
                         value={settings.numberOfColors}
                         onChange={(e) => {
-                          const newSettings = {
-                            ...settings,
-                            numberOfColors: Math.max(1, Math.min(10, parseInt(e.target.value) || 1))
-                          };
-                          setSettings(newSettings);
+                          const value = Math.max(1, Math.min(10, parseInt(e.target.value) || 1));
+                          setSettings(prev => ({...prev, numberOfColors: value}));
+                        }}
+                        onBlur={(e) => {
                           if (wsRef.current) {
                             wsRef.current.send(JSON.stringify({
                               type: 'UPDATE_SETTINGS',
-                              payload: newSettings
+                              payload: settings
                             }));
+                          }
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && wsRef.current) {
+                            wsRef.current.send(JSON.stringify({
+                              type: 'UPDATE_SETTINGS',
+                              payload: settings
+                            }));
+                            e.currentTarget.blur();
                           }
                         }}
                         style={{ marginLeft: '10px' }}
@@ -207,16 +215,24 @@ function App() {
                         max="120"
                         value={settings.timePerRound}
                         onChange={(e) => {
-                          const newSettings = {
-                            ...settings,
-                            timePerRound: Math.max(10, Math.min(120, parseInt(e.target.value) || 10))
-                          };
-                          setSettings(newSettings);
+                          const value = Math.max(10, Math.min(120, parseInt(e.target.value) || 10));
+                          setSettings(prev => ({...prev, timePerRound: value}));
+                        }}
+                        onBlur={(e) => {
                           if (wsRef.current) {
                             wsRef.current.send(JSON.stringify({
                               type: 'UPDATE_SETTINGS',
-                              payload: newSettings
+                              payload: settings
                             }));
+                          }
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && wsRef.current) {
+                            wsRef.current.send(JSON.stringify({
+                              type: 'UPDATE_SETTINGS',
+                              payload: settings
+                            }));
+                            e.currentTarget.blur();
                           }
                         }}
                         style={{ marginLeft: '10px' }}

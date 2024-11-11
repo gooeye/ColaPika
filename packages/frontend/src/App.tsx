@@ -94,9 +94,14 @@ function App() {
       }
     };
 
-    ws.onclose = () => {
+    ws.onclose = (event) => {
       setIsConnected(false);
       console.log('Disconnected from session');
+      
+      if (event.reason === 'Name already taken') {
+        alert('That name is already taken in this session. Please choose a different name.');
+        setPlayerName('');
+      }
     };
 
     wsRef.current = ws;

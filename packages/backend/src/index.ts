@@ -241,6 +241,16 @@ wss.on('connection', (ws, req) => {
 
   const session = sessions.get(sessionId)!;
   
+  // Check for duplicate names in the session
+  const isDuplicateName = Array.from(session.players.values()).some(
+    player => player.name.toLowerCase() === playerName.toLowerCase()
+  );
+  
+  if (isDuplicateName) {
+    ws.close(1008, 'Name already taken');
+    return;
+  }
+
   if (session.password && session.password !== password) {
     ws.close(1008, 'Invalid password');
     return;

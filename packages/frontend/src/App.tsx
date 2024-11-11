@@ -207,7 +207,7 @@ function App() {
           </div>
       ) : (
         <div>
-          <h2>Session: {sessionId}</h2>
+          <div className="session-id">Session ID: {sessionId}</div>
           {gamePhase === 'WAITING' && (
             <div>
               {isHost && (

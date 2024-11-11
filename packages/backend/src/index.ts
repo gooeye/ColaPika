@@ -324,6 +324,23 @@ wss.on('connection', (ws, req) => {
       switch (message.type) {
         case 'START':
           if (session.players.size >= 3) {
+            // Reset all player scores
+            session.players.forEach(player => {
+              player.score = 0;
+            });
+            
+            // Broadcast the reset scores
+            broadcastToSession(session, {
+              type: 'PLAYERS_UPDATE',
+              payload: {
+                players: Array.from(session.players.values()).map(p => ({
+                  id: p.id,
+                  name: p.name,
+                  score: p.score
+                }))
+              }
+            });
+            
             startNewRound(session);
           }
           break;

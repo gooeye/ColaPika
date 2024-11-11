@@ -285,13 +285,21 @@ function App() {
                     </div>
                     <button
                       onClick={() => {
-                        if (wsRef.current) {
+                        if (wsRef.current && 
+                            settings.numberOfColors >= 1 && settings.numberOfColors <= 10 &&
+                            settings.timePerDescriptionRound >= 10 && settings.timePerDescriptionRound <= 120 &&
+                            settings.timePerVotingRound >= 10 && settings.timePerVotingRound <= 120) {
                           wsRef.current.send(JSON.stringify({
                             type: 'UPDATE_SETTINGS',
                             payload: settings
                           }));
                         }
                       }}
+                      disabled={
+                        settings.numberOfColors < 1 || settings.numberOfColors > 10 ||
+                        settings.timePerDescriptionRound < 10 || settings.timePerDescriptionRound > 120 ||
+                        settings.timePerVotingRound < 10 || settings.timePerVotingRound > 120
+                      }
                       style={{
                         padding: '8px 16px',
                         backgroundColor: '#4CAF50',

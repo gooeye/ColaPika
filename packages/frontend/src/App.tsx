@@ -14,6 +14,7 @@ function App() {
   const [descriptions, setDescriptions] = useState<{id: string, text: string}[]>([]);
   const [players, setPlayers] = useState<{id: string, name: string, score: number}[]>([]);
   const [currentPlayerId, setCurrentPlayerId] = useState<string>('');
+  const [selectedDescriptionId, setSelectedDescriptionId] = useState<string>('');
   const wsRef = useRef<WebSocket | null>(null);
 
   const createSession = async () => {
@@ -204,22 +205,22 @@ function App() {
                       .map((d) => (
                         <div key={d.id} style={{ marginBottom: '10px' }}>
                           <button 
-                            onClick={() => setCurrentPlayerId(d.id)}
+                            onClick={() => setSelectedDescriptionId(d.id)}
                             style={{
                               padding: '10px',
                               fontSize: '16px',
                               cursor: 'pointer',
                               width: '100%',
-                              backgroundColor: currentPlayerId === d.id ? '#e0e0e0' : 'white'
+                              backgroundColor: selectedDescriptionId === d.id ? '#e0e0e0' : 'white'
                             }}
                           >
                             {d.text}
                           </button>
-                          {currentPlayerId === d.id && (
+                          {selectedDescriptionId === d.id && (
                             <button 
                               onClick={() => {
                                 handleVote(d.id);
-                                setCurrentPlayerId('voted');
+                                setSelectedDescriptionId('voted');
                               }}
                               style={{
                                 marginTop: '5px',
@@ -237,7 +238,7 @@ function App() {
                         </div>
                       ))}
                   </div>
-                  {currentPlayerId === 'voted' && (
+                  {selectedDescriptionId === 'voted' && (
                     <div style={{ marginTop: '10px', color: '#4CAF50' }}>
                       Vote submitted! Waiting for other players...
                     </div>

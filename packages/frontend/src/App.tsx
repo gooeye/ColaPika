@@ -116,9 +116,15 @@ function App() {
         type: 'DESCRIPTION',
         payload: { description }
       }));
+      // Update local state to show this player is done
+      setPlayers(prevPlayers => prevPlayers.map(player => 
+        player.id === currentPlayerId 
+          ? { ...player, description: description }
+          : player
+      ));
       setDescription('');
     }
-  }, [description]);
+  }, [description, currentPlayerId]);
 
   const handleVote = useCallback((descriptionId: string) => {
     if (wsRef.current) {

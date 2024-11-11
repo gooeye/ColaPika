@@ -27,7 +27,7 @@ const PlayerList: React.FC<PlayerListProps> = ({
   const playersNeeded = minPlayers ? Math.max(0, minPlayers - players.length) : 0;
 
   return (
-    <div className="players-sidebar">
+    <div className="players-container">
       <h3>Players {minPlayers && `(${players.length}/${minPlayers})`}</h3>
       <div className="players-list">
         {sortedPlayers.map((player) => (

@@ -51,10 +51,6 @@ html, body {
   width: 500px;
 }
 
-.game-content > * {
-  width: 100%;
-}
-
 .players-list {
   display: flex;
   flex-direction: column;
@@ -93,6 +89,7 @@ html, body {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   font-size: 0.9em;
   color: #666;
+  width: auto;
 }
 
 .game-title {

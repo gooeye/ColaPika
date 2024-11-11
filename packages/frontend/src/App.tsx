@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import './App.css';
 import PlayerList from './components/PlayerList';
 
@@ -6,7 +6,6 @@ function App() {
   const [sessionId, setSessionId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [playerName, setPlayerName] = useState<string>('');
-  const [playerId, setPlayerId] = useState<string>('');
   const [isHost, setIsHost] = useState<boolean>(false);
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [gamePhase, setGamePhase] = useState<string>('WAITING');
@@ -259,7 +258,6 @@ function App() {
                           }}
                           onClick={(e) => e.currentTarget.focus()}
                           onMouseUp={(e) => e.currentTarget.blur()}
-                          onBlur={(e) => e.currentTarget.blur()}
                           style={{ 
                             marginLeft: '10px',
                             width: '80px',
@@ -286,7 +284,6 @@ function App() {
                           }}
                           onClick={(e) => e.currentTarget.focus()}
                           onMouseUp={(e) => e.currentTarget.blur()}
-                          onBlur={(e) => e.currentTarget.blur()}
                           style={{ width: '80px', textAlign: 'center' }}
                         />
                       </label>
@@ -309,7 +306,6 @@ function App() {
                           }}
                           onClick={(e) => e.currentTarget.focus()}
                           onMouseUp={(e) => e.currentTarget.blur()}
-                          onBlur={(e) => e.currentTarget.blur()}
                           style={{ width: '80px', textAlign: 'center' }}
                         />
                       </label>

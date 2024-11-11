@@ -226,6 +226,7 @@ function App() {
                             const value = Math.max(1, Math.min(10, parseInt(e.target.value) || 1));
                             setSettings(prev => ({...prev, numberOfColors: value}));
                           }}
+                          onClick={(e) => e.currentTarget.focus()}
                           style={{ marginLeft: '10px' }}
                         />
                       </label>
@@ -242,6 +243,7 @@ function App() {
                             const value = Math.max(10, Math.min(120, parseInt(e.target.value) || 10));
                             setSettings(prev => ({...prev, timePerDescriptionRound: value}));
                           }}
+                          onClick={(e) => e.currentTarget.focus()}
                           style={{ marginLeft: '10px' }}
                         />
                       </label>
@@ -258,6 +260,7 @@ function App() {
                             const value = Math.max(10, Math.min(120, parseInt(e.target.value) || 10));
                             setSettings(prev => ({...prev, timePerVotingRound: value}));
                           }}
+                          onClick={(e) => e.currentTarget.focus()}
                           style={{ marginLeft: '10px' }}
                         />
                       </label>

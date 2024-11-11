@@ -224,6 +224,9 @@ function App() {
                           step="1"
                           value={settings.numberOfColors}
                           onChange={(e) => {
+                            setSettings(prev => ({...prev, numberOfColors: parseInt(e.target.value) || prev.numberOfColors}));
+                          }}
+                          onBlur={(e) => {
                             const value = Math.max(1, Math.min(10, parseInt(e.target.value) || 1));
                             setSettings(prev => ({...prev, numberOfColors: value}));
                           }}
@@ -244,6 +247,9 @@ function App() {
                           step="1"
                           value={settings.timePerDescriptionRound}
                           onChange={(e) => {
+                            setSettings(prev => ({...prev, timePerDescriptionRound: parseInt(e.target.value) || prev.timePerDescriptionRound}));
+                          }}
+                          onBlur={(e) => {
                             const value = Math.max(10, Math.min(120, parseInt(e.target.value) || 10));
                             setSettings(prev => ({...prev, timePerDescriptionRound: value}));
                           }}
@@ -264,6 +270,9 @@ function App() {
                           step="1"
                           value={settings.timePerVotingRound}
                           onChange={(e) => {
+                            setSettings(prev => ({...prev, timePerVotingRound: parseInt(e.target.value) || prev.timePerVotingRound}));
+                          }}
+                          onBlur={(e) => {
                             const value = Math.max(10, Math.min(120, parseInt(e.target.value) || 10));
                             setSettings(prev => ({...prev, timePerVotingRound: value}));
                           }}

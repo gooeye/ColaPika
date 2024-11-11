@@ -9,7 +9,7 @@
     "start:frontend": "yarn workspace frontend start",
     "dev:backend": "yarn workspace backend dev",
     "dev:frontend": "yarn workspace frontend dev",
-    "start": "concurrently \"yarn start:backend\" \"yarn start:frontend\""
+    "start": "yarn concurrently \"yarn start:backend\" \"yarn start:frontend\""
   },
   "devDependencies": {
     "concurrently": "^8.0.0"

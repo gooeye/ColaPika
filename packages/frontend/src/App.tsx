@@ -19,6 +19,7 @@ function App() {
   const [players, setPlayers] = useState<{id: string, name: string, score: number}[]>([]);
   const [currentPlayerId, setCurrentPlayerId] = useState<string>('');
   const [selectedDescriptionId, setSelectedDescriptionId] = useState<string>('');
+  const [submittedVotes, setSubmittedVotes] = useState<{[color: string]: boolean}>({});
   const wsRef = useRef<WebSocket | null>(null);
 
   const createSession = async () => {
@@ -61,8 +62,16 @@ function App() {
           break;
           
         case 'STATE_UPDATE':
-          if (message.payload.phase) setGamePhase(message.payload.phase);
-          if (message.payload.color) setCurrentColor(message.payload.color);
+          if (message.payload.phase) {
+            setGamePhase(message.payload.phase);
+            // Reset selection when phase changes
+            setSelectedDescriptionId('');
+          }
+          if (message.payload.color) {
+            setCurrentColor(message.payload.color);
+            // Reset selection when color changes
+            setSelectedDescriptionId('');
+          }
           if (message.payload.timeRemaining) setTimeRemaining(message.payload.timeRemaining);
           if (message.payload.descriptions) setDescriptions(message.payload.descriptions);
           if (message.payload.scores) setPlayers(message.payload.scores);
@@ -268,7 +277,7 @@ function App() {
                   )}
 
                   <h3>Vote for the best description:</h3>
-                  {selectedDescriptionId === 'voted' ? (
+                  {submittedVotes[currentColor] ? (
                     <div>
                       <div style={{ padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '5px', marginBottom: '20px' }}>
                         <strong>Your vote:</strong> {descriptions.find(d => d.id === selectedDescriptionId)?.text}
@@ -302,9 +311,12 @@ function App() {
                       </div>
                       <button 
                         onClick={() => {
-                          if (selectedDescriptionId && selectedDescriptionId !== 'voted') {
+                          if (selectedDescriptionId) {
                             handleVote(selectedDescriptionId);
-                            setSelectedDescriptionId('voted');
+                            setSubmittedVotes(prev => ({
+                              ...prev,
+                              [currentColor]: true
+                            }));
                           }
                         }}
                         style={{
@@ -317,7 +329,7 @@ function App() {
                           cursor: selectedDescriptionId ? 'pointer' : 'not-allowed',
                           width: '100%'
                         }}
-                        disabled={!selectedDescriptionId || selectedDescriptionId === 'voted'}
+                        disabled={!selectedDescriptionId || submittedVotes[currentColor]}
                       >
                         Confirm Vote
                       </button>

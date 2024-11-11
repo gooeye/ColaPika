@@ -8,6 +8,10 @@ function App() {
   const [isHost, setIsHost] = useState<boolean>(false);
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [gamePhase, setGamePhase] = useState<string>('WAITING');
+  const [settings, setSettings] = useState<{numberOfColors: number, timePerRound: number}>({
+    numberOfColors: 5,
+    timePerRound: 15
+  });
   const [currentColor, setCurrentColor] = useState<string>('');
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [description, setDescription] = useState<string>('');
@@ -62,6 +66,7 @@ function App() {
           if (message.payload.timeRemaining) setTimeRemaining(message.payload.timeRemaining);
           if (message.payload.descriptions) setDescriptions(message.payload.descriptions);
           if (message.payload.scores) setPlayers(message.payload.scores);
+          if (message.payload.settings) setSettings(message.payload.settings);
           break;
       }
     };
@@ -155,9 +160,73 @@ function App() {
           </div>
           
           {gamePhase === 'WAITING' && (
-            <button onClick={startGame} disabled={players.length < 3}>
-              Start Game (Need {Math.max(0, 3 - players.length)} more players)
-            </button>
+            <div>
+              {isHost && (
+                <div style={{ marginBottom: '20px', padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '5px' }}>
+                  <h3>Game Settings</h3>
+                  <div style={{ marginBottom: '10px' }}>
+                    <label style={{ display: 'block', marginBottom: '5px' }}>
+                      Number of Colors:
+                      <input
+                        type="number"
+                        min="1"
+                        max="10"
+                        value={settings.numberOfColors}
+                        onChange={(e) => {
+                          const newSettings = {
+                            ...settings,
+                            numberOfColors: Math.max(1, Math.min(10, parseInt(e.target.value) || 1))
+                          };
+                          setSettings(newSettings);
+                          if (wsRef.current) {
+                            wsRef.current.send(JSON.stringify({
+                              type: 'UPDATE_SETTINGS',
+                              payload: newSettings
+                            }));
+                          }
+                        }}
+                        style={{ marginLeft: '10px' }}
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '5px' }}>
+                      Time per Round (seconds):
+                      <input
+                        type="number"
+                        min="10"
+                        max="120"
+                        value={settings.timePerRound}
+                        onChange={(e) => {
+                          const newSettings = {
+                            ...settings,
+                            timePerRound: Math.max(10, Math.min(120, parseInt(e.target.value) || 10))
+                          };
+                          setSettings(newSettings);
+                          if (wsRef.current) {
+                            wsRef.current.send(JSON.stringify({
+                              type: 'UPDATE_SETTINGS',
+                              payload: newSettings
+                            }));
+                          }
+                        }}
+                        style={{ marginLeft: '10px' }}
+                      />
+                    </label>
+                  </div>
+                </div>
+              )}
+              {!isHost && (
+                <div style={{ marginBottom: '20px', padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '5px' }}>
+                  <h3>Current Settings</h3>
+                  <p>Number of Colors: {settings.numberOfColors}</p>
+                  <p>Time per Round: {settings.timePerRound} seconds</p>
+                </div>
+              )}
+              <button onClick={startGame} disabled={players.length < 3}>
+                Start Game (Need {Math.max(0, 3 - players.length)} more players)
+              </button>
+            </div>
           )}
           
           {gamePhase === 'DESCRIBING' && (

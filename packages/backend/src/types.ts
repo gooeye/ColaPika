@@ -20,6 +20,6 @@ export interface GameSettings {
 }
 
 export interface GameMessage {
-  type: 'JOIN' | 'START' | 'DESCRIPTION' | 'VOTE' | 'STATE_UPDATE';
+  type: 'JOIN' | 'START' | 'DESCRIPTION' | 'VOTE' | 'STATE_UPDATE' | 'UPDATE_SETTINGS';
   payload: any;
 }

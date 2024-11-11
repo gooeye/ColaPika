@@ -278,6 +278,22 @@ wss.on('connection', (ws, req) => {
             startNewRound(session);
           }
           break;
+
+        case 'UPDATE_SETTINGS':
+          // Update session settings
+          session.settings = {
+            ...session.settings,
+            ...message.payload
+          };
+          
+          // Broadcast new settings to all players
+          broadcastToSession(session, {
+            type: 'STATE_UPDATE',
+            payload: {
+              settings: session.settings
+            }
+          });
+          break;
           
         case 'DESCRIPTION':
           if (session.gameState?.currentPhase === 'DESCRIBING') {

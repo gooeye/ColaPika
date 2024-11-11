@@ -221,12 +221,15 @@ function App() {
                           type="number"
                           min="1"
                           max="10"
+                          step="1"
                           value={settings.numberOfColors}
                           onChange={(e) => {
                             const value = Math.max(1, Math.min(10, parseInt(e.target.value) || 1));
                             setSettings(prev => ({...prev, numberOfColors: value}));
                           }}
                           onClick={(e) => e.currentTarget.focus()}
+                          onMouseUp={(e) => e.currentTarget.blur()}
+                          onBlur={(e) => e.currentTarget.blur()}
                           style={{ marginLeft: '10px' }}
                         />
                       </label>
@@ -238,12 +241,15 @@ function App() {
                           type="number"
                           min="10"
                           max="120"
+                          step="1"
                           value={settings.timePerDescriptionRound}
                           onChange={(e) => {
                             const value = Math.max(10, Math.min(120, parseInt(e.target.value) || 10));
                             setSettings(prev => ({...prev, timePerDescriptionRound: value}));
                           }}
                           onClick={(e) => e.currentTarget.focus()}
+                          onMouseUp={(e) => e.currentTarget.blur()}
+                          onBlur={(e) => e.currentTarget.blur()}
                           style={{ marginLeft: '10px' }}
                         />
                       </label>
@@ -255,12 +261,15 @@ function App() {
                           type="number"
                           min="10"
                           max="120"
+                          step="1"
                           value={settings.timePerVotingRound}
                           onChange={(e) => {
                             const value = Math.max(10, Math.min(120, parseInt(e.target.value) || 10));
                             setSettings(prev => ({...prev, timePerVotingRound: value}));
                           }}
                           onClick={(e) => e.currentTarget.focus()}
+                          onMouseUp={(e) => e.currentTarget.blur()}
+                          onBlur={(e) => e.currentTarget.blur()}
                           style={{ marginLeft: '10px' }}
                         />
                       </label>

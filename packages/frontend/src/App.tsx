@@ -23,7 +23,7 @@ function App() {
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [description, setDescription] = useState<string>('');
   const [descriptions, setDescriptions] = useState<{id: string, text: string}[]>([]);
-  const [players, setPlayers] = useState<{id: string, name: string, score: number}[]>([]);
+  const [players, setPlayers] = useState<{id: string, name: string, score: number, description?: string}[]>([]);
   const [currentPlayerId, setCurrentPlayerId] = useState<string>('');
   const [selectedDescriptionId, setSelectedDescriptionId] = useState<string>('');
   const [submittedVotes, setSubmittedVotes] = useState<{[color: string]: boolean}>({});
@@ -80,7 +80,14 @@ function App() {
             setSelectedDescriptionId('');
           }
           if (message.payload.timeRemaining) setTimeRemaining(message.payload.timeRemaining);
-          if (message.payload.descriptions) setDescriptions(message.payload.descriptions);
+          if (message.payload.descriptions) {
+            setDescriptions(message.payload.descriptions);
+            // Update players' description status
+            setPlayers(prevPlayers => prevPlayers.map(player => ({
+              ...player,
+              description: message.payload.descriptions.find((d: {id: string}) => d.id === player.id)?.text
+            })));
+          }
           if (message.payload.scores) setPlayers(message.payload.scores);
           if (message.payload.settings) setSettings(message.payload.settings);
           break;

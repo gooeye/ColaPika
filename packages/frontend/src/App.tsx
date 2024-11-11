@@ -257,7 +257,11 @@ function App() {
                           onClick={(e) => e.currentTarget.focus()}
                           onMouseUp={(e) => e.currentTarget.blur()}
                           onBlur={(e) => e.currentTarget.blur()}
-                          style={{ marginLeft: '10px' }}
+                          style={{ 
+                            marginLeft: '10px',
+                            width: '80px',
+                            textAlign: 'center'
+                          }}
                         />
                       </label>
                     </div>

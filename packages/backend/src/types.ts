@@ -1,3 +1,5 @@
+import { WebSocket } from 'ws';
+
 export interface Player {
   id: string;
   name: string;
@@ -7,7 +9,7 @@ export interface Player {
 }
 
 export interface GameState {
-  currentPhase: 'WAITING' | 'DESCRIBING' | 'VOTING' | 'RESULTS';
+  currentPhase: 'WAITING' | 'DESCRIBING' | 'VOTING' | 'INTERMEDIATE_RESULTS' | 'RESULTS';
   colors: string[];
   currentColorIndex: number;
   descriptions: Map<string, Map<string, string>>;  // color -> (playerId -> description)
@@ -22,6 +24,6 @@ export interface GameSettings {
 }
 
 export interface GameMessage {
-  type: 'JOIN' | 'START' | 'DESCRIPTION' | 'VOTE' | 'STATE_UPDATE' | 'UPDATE_SETTINGS';
+  type: 'JOIN' | 'START' | 'DESCRIPTION' | 'VOTE' | 'STATE_UPDATE' | 'UPDATE_SETTINGS' | 'PLAYERS_UPDATE' | 'NEXT_VOTE';
   payload: any;
 }

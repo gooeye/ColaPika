@@ -149,7 +149,7 @@ function advanceGameState(session: GameSession) {
         type: 'STATE_UPDATE',
         payload: {
           color: session.gameState.colors[session.gameState.currentColorIndex],
-          timeRemaining: session.settings.timePerRound,
+          timeRemaining: session.settings.timePerDescriptionRound,
           descriptions: Array.from(session.players.values()).map(p => ({
             id: p.id,
             text: p.description
@@ -415,7 +415,7 @@ wss.on('connection', (ws, req) => {
           if (session.gameState?.currentPhase === 'INTERMEDIATE_RESULTS') {
             // Start voting phase for the next color
             session.gameState.currentPhase = 'VOTING';
-            session.gameState.timeRemaining = session.settings.timePerRound;
+            session.gameState.timeRemaining = session.settings.timePerVotingRound;
             const currentColor = session.gameState.colors[session.gameState.currentColorIndex];
             
             // Get descriptions for the current color

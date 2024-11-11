@@ -8,9 +8,14 @@ function App() {
   const [isHost, setIsHost] = useState<boolean>(false);
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [gamePhase, setGamePhase] = useState<string>('WAITING');
-  const [settings, setSettings] = useState<{numberOfColors: number, timePerRound: number}>({
+  const [settings, setSettings] = useState<{
+    numberOfColors: number, 
+    timePerDescriptionRound: number,
+    timePerVotingRound: number
+  }>({
     numberOfColors: 5,
-    timePerRound: 15
+    timePerDescriptionRound: 30,
+    timePerVotingRound: 15
   });
   const [currentColor, setCurrentColor] = useState<string>('');
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
@@ -173,71 +178,75 @@ function App() {
               {isHost && (
                 <div style={{ marginBottom: '20px', padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '5px' }}>
                   <h3>Game Settings</h3>
-                  <div style={{ marginBottom: '10px' }}>
-                    <label style={{ display: 'block', marginBottom: '5px' }}>
-                      Number of Colors:
-                      <input
-                        type="number"
-                        min="1"
-                        max="10"
-                        value={settings.numberOfColors}
-                        onChange={(e) => {
-                          const value = Math.max(1, Math.min(10, parseInt(e.target.value) || 1));
-                          setSettings(prev => ({...prev, numberOfColors: value}));
-                        }}
-                        onBlur={(e) => {
-                          if (wsRef.current) {
-                            wsRef.current.send(JSON.stringify({
-                              type: 'UPDATE_SETTINGS',
-                              payload: settings
-                            }));
-                          }
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' && wsRef.current) {
-                            wsRef.current.send(JSON.stringify({
-                              type: 'UPDATE_SETTINGS',
-                              payload: settings
-                            }));
-                            e.currentTarget.blur();
-                          }
-                        }}
-                        style={{ marginLeft: '10px' }}
-                      />
-                    </label>
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '5px' }}>
-                      Time per Round (seconds):
-                      <input
-                        type="number"
-                        min="10"
-                        max="120"
-                        value={settings.timePerRound}
-                        onChange={(e) => {
-                          const value = Math.max(10, Math.min(120, parseInt(e.target.value) || 10));
-                          setSettings(prev => ({...prev, timePerRound: value}));
-                        }}
-                        onBlur={(e) => {
-                          if (wsRef.current) {
-                            wsRef.current.send(JSON.stringify({
-                              type: 'UPDATE_SETTINGS',
-                              payload: settings
-                            }));
-                          }
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' && wsRef.current) {
-                            wsRef.current.send(JSON.stringify({
-                              type: 'UPDATE_SETTINGS',
-                              payload: settings
-                            }));
-                            e.currentTarget.blur();
-                          }
-                        }}
-                        style={{ marginLeft: '10px' }}
-                      />
-                    </label>
+                  <div style={{ marginBottom: '20px' }}>
+                    <div style={{ marginBottom: '10px' }}>
+                      <label style={{ display: 'block', marginBottom: '5px' }}>
+                        Number of Colors:
+                        <input
+                          type="number"
+                          min="1"
+                          max="10"
+                          value={settings.numberOfColors}
+                          onChange={(e) => {
+                            const value = Math.max(1, Math.min(10, parseInt(e.target.value) || 1));
+                            setSettings(prev => ({...prev, numberOfColors: value}));
+                          }}
+                          style={{ marginLeft: '10px' }}
+                        />
+                      </label>
+                    </div>
+                    <div style={{ marginBottom: '10px' }}>
+                      <label style={{ display: 'block', marginBottom: '5px' }}>
+                        Time per Description Round (seconds):
+                        <input
+                          type="number"
+                          min="10"
+                          max="120"
+                          value={settings.timePerDescriptionRound}
+                          onChange={(e) => {
+                            const value = Math.max(10, Math.min(120, parseInt(e.target.value) || 10));
+                            setSettings(prev => ({...prev, timePerDescriptionRound: value}));
+                          }}
+                          style={{ marginLeft: '10px' }}
+                        />
+                      </label>
+                    </div>
+                    <div style={{ marginBottom: '10px' }}>
+                      <label style={{ display: 'block', marginBottom: '5px' }}>
+                        Time per Voting Round (seconds):
+                        <input
+                          type="number"
+                          min="10"
+                          max="120"
+                          value={settings.timePerVotingRound}
+                          onChange={(e) => {
+                            const value = Math.max(10, Math.min(120, parseInt(e.target.value) || 10));
+                            setSettings(prev => ({...prev, timePerVotingRound: value}));
+                          }}
+                          style={{ marginLeft: '10px' }}
+                        />
+                      </label>
+                    </div>
+                    <button
+                      onClick={() => {
+                        if (wsRef.current) {
+                          wsRef.current.send(JSON.stringify({
+                            type: 'UPDATE_SETTINGS',
+                            payload: settings
+                          }));
+                        }
+                      }}
+                      style={{
+                        padding: '8px 16px',
+                        backgroundColor: '#4CAF50',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Update Settings
+                    </button>
                   </div>
                 </div>
               )}
@@ -245,7 +254,8 @@ function App() {
                 <div style={{ marginBottom: '20px', padding: '15px', backgroundColor: '#f5f5f5', borderRadius: '5px' }}>
                   <h3>Current Settings</h3>
                   <p>Number of Colors: {settings.numberOfColors}</p>
-                  <p>Time per Round: {settings.timePerRound} seconds</p>
+                  <p>Time per Description Round: {settings.timePerDescriptionRound} seconds</p>
+                  <p>Time per Voting Round: {settings.timePerVotingRound} seconds</p>
                 </div>
               )}
               <button onClick={startGame} disabled={players.length < 3}>

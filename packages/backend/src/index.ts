@@ -17,7 +17,8 @@ interface GameSession {
 
 const DEFAULT_SETTINGS: GameSettings = {
   numberOfColors: 5,
-  timePerRound: 15
+  timePerDescriptionRound: 30,
+  timePerVotingRound: 15
 };
 
 function generateRandomColor(): string {
@@ -72,7 +73,7 @@ function startNewRound(session: GameSession) {
     currentColorIndex: 0,
     descriptions: new Map(),
     votes: new Map(),
-    timeRemaining: session.settings.timePerRound
+    timeRemaining: session.settings.timePerDescriptionRound
   };
 
   broadcastToSession(session, {
@@ -108,7 +109,7 @@ function advanceGameState(session: GameSession) {
   if (session.gameState.currentPhase === 'DESCRIBING') {
     if (session.gameState.currentColorIndex < session.gameState.colors.length - 1) {
       session.gameState.currentColorIndex++;
-      session.gameState.timeRemaining = session.settings.timePerRound;
+      session.gameState.timeRemaining = session.settings.timePerDescriptionRound;
       
       broadcastToSession(session, {
         type: 'STATE_UPDATE',
@@ -135,7 +136,7 @@ function advanceGameState(session: GameSession) {
     } else {
       session.gameState.currentPhase = 'VOTING';
       session.gameState.currentColorIndex = 0;
-      session.gameState.timeRemaining = session.settings.timePerRound;
+      session.gameState.timeRemaining = session.settings.timePerVotingRound;
 
       // Convert descriptions Map to array format
       const descriptionsArray = Array.from(session.gameState.descriptions.get(session.gameState.colors[0]) || new Map())

@@ -16,7 +16,8 @@ export interface GameState {
 
 export interface GameSettings {
   numberOfColors: number;
-  timePerRound: number;
+  timePerDescriptionRound: number;
+  timePerVotingRound: number;
 }
 
 export interface GameMessage {

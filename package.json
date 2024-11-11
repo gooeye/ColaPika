@@ -12,6 +12,6 @@
     "start": "yarn concurrently \"yarn start:backend\" \"yarn start:frontend\""
   },
   "devDependencies": {
-    "concurrently": "^8.0.0"
+    "concurrently": "^9.1.0"
   }
 }
